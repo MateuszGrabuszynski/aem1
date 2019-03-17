@@ -68,6 +68,6 @@ gr_dists = []
 for i in range(10):
     gr_points = pts.loc[pts['gr'] == i]['point']
     # print(gr_points.values.tolist())
-    gr_dists[i] = dists_orig.loc[gr_points.values.tolist()]
+    gr_dists.append(dists_orig[gr_points.values.tolist()].loc[gr_points.values.tolist()])
     print(i)
     print(gr_dists[i])
