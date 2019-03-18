@@ -64,7 +64,7 @@ pts = pd.DataFrame({
     'y': points['Y'],
     'gr': y_km
 })
-print(pts)
+#print(pts)
 
 # DO PLIKU:
 # file = open('adam.txt', 'w')
@@ -75,24 +75,52 @@ print(pts)
 trees = []
 gr_dists = []
 for i in range(10):
-    gr_points = pts.loc[pts['gr'] == i]['point']
-    # print(gr_points.values.tolist())
+    gr_pts = pts.loc[pts['gr'] == i]
+    gr_points = gr_pts['point']
+
+
+
+    gr_points_values = pts.loc[pts['gr'] == i]
+
     gr_dists.append(dists_orig[gr_points.values.tolist()].loc[gr_points.values.tolist()])
+    #print(gr_dists)
     # print(i)
     # print(gr_dists[i])
     trees.append([])
+
+
+    # TU DO DAJESZ 1 PUNKT !
     trees[i].append((random.choice(gr_points), None, 2000))
 
+append_vert = {"p1":None, "[x1, y1]":None, "p2":None, "[x2, y2]":None, "dist": None}
+
 for i in range(10):
+
+    # TU MASZ WYBRANE DRZEWO Z JEDNYM PKT
     curr_min = trees[i]
-    print(f'Grupa {i}!')
-    for j in gr_dists[i]:
+
+
+    for p1 in gr_dists[i]:
+
         # if j in trees[0] or j in trees[1]:
-        temporary = gr_dists[i].nsmallest(2, columns=j)[1:][j]
-        if temporary[0] < curr_min[0][2]:
-            curr_min = (j, temporary.index[0], temporary[0])
-            print(f'Dla {j} punkt {temporary.index[0]} odlegly o {temporary[0]}')
-        print(curr_min)
+
+        # TU WYBIERASZ DLA KAŻDEGO PUNKTU W DRZEWIE NAJBLIŻSZY INNY PUNKT
+        temporary = gr_dists[i].nsmallest(2, columns=p1)[1:][p1]
+
+        # INDEX ZAWIERA NR PUNKTU POTENCJALNIE DO DOŁĄCZAENIA:
+        p2 = temporary.index
+        dist_p1_p2 = temporary[0]
+        # P1 JEST PUNKTEM Z DRZEWA
+        print(p1, p2[0], dist_p1_p2)
+
+        if append_vert["p2"] == None or append_vert["dist"] > temporary[0]:
+
+
+
+        #if temporary[0] < curr_min[0][2]:
+        #    curr_min = (j, temporary.index[0], temporary[0])
+        #    print(f'Dla {j} punkt {temporary.index[0]} odlegly o {temporary[0]}')
+        #print(curr_min)
 
 
 
