@@ -66,6 +66,13 @@ pts = pd.DataFrame({
 })
 print(pts)
 
+# DO PLIKU:
+# file = open('adam.txt', 'w')
+# pts.to_csv(file, index=None)
+
+
+
+trees = []
 gr_dists = []
 for i in range(10):
     gr_points = pts.loc[pts['gr'] == i]['point']
@@ -73,6 +80,22 @@ for i in range(10):
     gr_dists.append(dists_orig[gr_points.values.tolist()].loc[gr_points.values.tolist()])
     # print(i)
     # print(gr_dists[i])
-    print(random.choice(gr_points))
+    trees.append([])
+    trees[i].append((random.choice(gr_points), None, 2000))
+
+for i in range(10):
+    curr_min = trees[i]
+    print(f'Grupa {i}!')
+    for j in gr_dists[i]:
+        # if j in trees[0] or j in trees[1]:
+        temporary = gr_dists[i].nsmallest(2, columns=j)[1:][j]
+        if temporary[0] < curr_min[0][2]:
+            curr_min = (j, temporary.index[0], temporary[0])
+            print(f'Dla {j} punkt {temporary.index[0]} odlegly o {temporary[0]}')
+        print(curr_min)
+
+
+
+
 
 
