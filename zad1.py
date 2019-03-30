@@ -4,10 +4,10 @@ import time
 
 start_time = time.time()
 GROUPS = 10
-POINTS = 201
+POINTS = 200
 rd.seed(65)
 # Read distances
-distances = pd.read_csv('distances.data', usecols=range(1, POINTS + 2))  # usecols=Omit the index column
+distances = pd.read_csv('distances.data', usecols=range(0, POINTS + 1))  # usecols=Omit the index column
 distances_cpy = distances.copy()
 
 cols = []
@@ -61,10 +61,14 @@ while len(not_available_ending_points) < POINTS:
 			not_available_ending_points.append(current_shortest_edge['to_point'])
 			for group in dictionaries.keys():
 				for _, point_in_group in dictionaries[group]:
-					#print("Drop", point_in_group, current_shortest_edge['to_point'])
+					# print("Drop", point_in_group, current_shortest_edge['to_point'])
 					cols[point_in_group].drop(current_shortest_edge['to_point'], inplace=True)
 
 			# print(type(cols[point_in_group]))
+			print("Group:", current_shortest_edge['group'],
+			      "From point:", current_shortest_edge['from_point'],
+			      "To point:", current_shortest_edge['to_point'],
+				  "Distance", current_shortest_edge['distance'])
 
 			dictionaries[current_shortest_edge['group']].append((current_shortest_edge['from_point'], current_shortest_edge['to_point']))
 			current_shortest_edge['group'] = None
@@ -75,3 +79,46 @@ while len(not_available_ending_points) < POINTS:
 print("dicti", dictionaries)
 elapsed_time = time.time() - start_time
 print(elapsed_time)
+
+
+
+import matplotlib.pyplot as plt
+import pandas as pd
+
+points = pd.read_csv('objects.data', sep=" ", header=None, usecols=[0, 1])
+points.columns = ['X', 'Y']
+
+x = []
+y = []
+clrs = []
+colors = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple', 'tab:brown', 'tab:pink', 'tab:gray',
+          'tab:olive', 'tab:cyan']
+
+edges = dictionaries
+
+for i in range(len(points)):
+	x.append(points.iloc[i][0])
+	y.append(points.iloc[i][1])
+	clrs.append(colors[0])
+
+clr_nr = 0
+for grp in edges.values():
+	for case in grp:
+		pointa_x = x[case[0]]
+		pointa_y = y[case[0]]
+
+		pointb_x = x[case[1]]
+		pointb_y = y[case[1]]
+		plt.plot([pointa_x, pointb_x], [pointa_y, pointb_y], c=colors[clr_nr])#, marker='o')
+	clr_nr += 1
+
+# plt.scatter(
+#     x,
+#     y,
+#     c=clrs
+# )
+
+plt.xlabel('X')
+plt.ylabel('Y')
+
+plt.show()
