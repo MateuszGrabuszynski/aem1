@@ -23,7 +23,7 @@ for i in range(len(points)):
 start_time = time.time()
 GROUPS = 10
 POINTS = 201
-#rd.seed(65)
+rd.seed(35)
 # Read distances
 distances = pd.read_csv('distances.data', usecols=range(0, POINTS + 1))  # usecols=Omit the index column
 distances_cpy = distances.copy()
@@ -102,27 +102,27 @@ print("dicti", dictionaries)
 elapsed_time = time.time() - start_time
 print(elapsed_time)
 # ----
-
-edges = dictionaries
-
-clr_nr = 0
-for grp in edges.values():
-    for case in grp:
-        pointa_x = x[case[0]]
-        pointa_y = y[case[0]]
-
-        pointb_x = x[case[1]]
-        pointb_y = y[case[1]]
-        plt.plot([pointa_x, pointb_x], [pointa_y, pointb_y], marker='o', c=colors[clr_nr])#, marker='o')
-    clr_nr += 1
-
-# plt.scatter(
-#     x,
-#     y,
-#     c=clrs
-# )
-
-plt.xlabel('X')
-plt.ylabel('Y')
-
-plt.show()
+# 
+# edges = dictionaries
+#
+# clr_nr = 0
+# for grp in edges.values():
+#     for case in grp:
+#         pointa_x = x[case[0]]
+#         pointa_y = y[case[0]]
+#
+#         pointb_x = x[case[1]]
+#         pointb_y = y[case[1]]
+#         plt.plot([pointa_x, pointb_x], [pointa_y, pointb_y], marker='o', c=colors[clr_nr])#, marker='o')
+#     clr_nr += 1
+#
+# # plt.scatter(
+# #     x,
+# #     y,
+# #     c=clrs
+# # )
+#
+# plt.xlabel('X')
+# plt.ylabel('Y')
+#
+# plt.show()
