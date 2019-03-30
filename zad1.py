@@ -4,8 +4,8 @@ import time
 
 start_time = time.time()
 GROUPS = 10
-POINTS = 200
-rd.seed(65)
+POINTS = 201
+#rd.seed(65)
 # Read distances
 distances = pd.read_csv('distances.data', usecols=range(0, POINTS + 1))  # usecols=Omit the index column
 distances_cpy = distances.copy()
