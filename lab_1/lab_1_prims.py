@@ -23,7 +23,7 @@ for i in range(len(points)):
 start_time = time.time()
 GROUPS = 10
 POINTS = 201
-rd.seed(35)
+#rd.seed(65)
 # Read distances
 distances = pd.read_csv('distances.data', usecols=range(0, POINTS + 1))  # usecols=Omit the index column
 distances_cpy = distances.copy()
@@ -34,22 +34,22 @@ for i in range(POINTS):
     cols.append(col[str(i)])  # .iloc[1:])
 
 # Points that are still available as endings
-not_available_ending_points = []
+not_available_ending_points = set()
 
 
 points = list(range(0, POINTS))
 groups = list(range(0, GROUPS))
-dictionaries = dict.fromkeys(groups, list())
+dictionaries = dict.fromkeys(groups, set())
 
 copy_point = points.copy()
 
 for group in dictionaries.keys():
     value = rd.choice(copy_point)
-    dictionaries[group] = [(value, value)]
+    dictionaries[group] = {(value, value)}
     # print(copy_point)
     copy_point.remove(value)
     # print(copy_point)
-    not_available_ending_points.append(value)
+    not_available_ending_points.add(value)
 
 
 while len(not_available_ending_points) < POINTS:
@@ -76,7 +76,7 @@ while len(not_available_ending_points) < POINTS:
 
     if current_shortest_edge['to_point'] is not None:
         # print('jestem tutaj!')
-        not_available_ending_points.append(current_shortest_edge['to_point'])
+        not_available_ending_points.add(current_shortest_edge['to_point'])
         for group in dictionaries.keys():
             for _, point_in_group in dictionaries[group]:
                 # print("Drop", point_in_group, current_shortest_edge['to_point'])
@@ -92,7 +92,7 @@ while len(not_available_ending_points) < POINTS:
         # plt.plot([x[current_shortest_edge['from_point']]], [y[current_shortest_edge['to_point']]])
         # plt.show()
 
-        dictionaries[current_shortest_edge['group']].append((current_shortest_edge['from_point'], current_shortest_edge['to_point']))
+        dictionaries[current_shortest_edge['group']].add((current_shortest_edge['from_point'], current_shortest_edge['to_point']))
         current_shortest_edge['group'] = None
         current_shortest_edge['from_point'] = None
         current_shortest_edge['to_point'] = None
@@ -102,27 +102,27 @@ print("dicti", dictionaries)
 elapsed_time = time.time() - start_time
 print(elapsed_time)
 # ----
-# 
-# edges = dictionaries
-#
-# clr_nr = 0
-# for grp in edges.values():
-#     for case in grp:
-#         pointa_x = x[case[0]]
-#         pointa_y = y[case[0]]
-#
-#         pointb_x = x[case[1]]
-#         pointb_y = y[case[1]]
-#         plt.plot([pointa_x, pointb_x], [pointa_y, pointb_y], marker='o', c=colors[clr_nr])#, marker='o')
-#     clr_nr += 1
-#
-# # plt.scatter(
-# #     x,
-# #     y,
-# #     c=clrs
-# # )
-#
-# plt.xlabel('X')
-# plt.ylabel('Y')
-#
-# plt.show()
+
+edges = dictionaries
+
+clr_nr = 0
+for grp in edges.values():
+    for case in grp:
+        pointa_x = x[case[0]]
+        pointa_y = y[case[0]]
+
+        pointb_x = x[case[1]]
+        pointb_y = y[case[1]]
+        plt.plot([pointa_x, pointb_x], [pointa_y, pointb_y], marker='o', c=colors[clr_nr])#, marker='o')
+    clr_nr += 1
+
+# plt.scatter(
+#     x,
+#     y,
+#     c=clrs
+# )
+
+plt.xlabel('X')
+plt.ylabel('Y')
+
+plt.show()
