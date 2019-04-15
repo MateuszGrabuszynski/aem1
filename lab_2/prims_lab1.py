@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 ###
 points = pd.read_csv('objects.data', sep=" ", header=None, usecols=[0, 1])
 points.columns = ['X', 'Y']
-
+print(points)
 x = []
 y = []
 clrs = []
@@ -18,15 +18,21 @@ for i in range(len(points)):
     x.append(points.iloc[i][0])
     y.append(points.iloc[i][1])
     clrs.append(colors[0])
+
+print("x:", x)
+print("y:", y)
 ###
 
 start_time = time.time()
-GROUPS = 10
-POINTS = 201
+GROUPS = 20
+POINTS = 423
 #rd.seed(65)
 # Read distances
-distances = pd.read_csv('distances.data', usecols=range(0, POINTS + 1))  # usecols=Omit the index column
+distances = pd.read_csv('distances.csv', sep=',', dtype=float, usecols=range(0, POINTS+1)) # usecols=Omit the index column
+print(distances.columns)
 distances_cpy = distances.copy()
+
+print(distances)
 
 cols = []
 for i in range(POINTS):
@@ -79,18 +85,7 @@ while len(not_available_ending_points) < POINTS:
         not_available_ending_points.add(current_shortest_edge['to_point'])
         for group in dictionaries.keys():
             for _, point_in_group in dictionaries[group]:
-                # print("Drop", point_in_group, current_shortest_edge['to_point'])
                 cols[point_in_group].drop(current_shortest_edge['to_point'], inplace=True)
-
-        # print(type(cols[point_in_group]))
-        # print("Group:", current_shortest_edge['group'],
-        #       "From point:", current_shortest_edge['from_point'],
-        #       "To point:", current_shortest_edge['to_point'],
-        #       "Distance", current_shortest_edge['distance'])
-
-        # PLOT
-        # plt.plot([x[current_shortest_edge['from_point']]], [y[current_shortest_edge['to_point']]])
-        # plt.show()
 
         dictionaries[current_shortest_edge['group']].add((current_shortest_edge['from_point'], current_shortest_edge['to_point']))
         current_shortest_edge['group'] = None
@@ -101,7 +96,6 @@ while len(not_available_ending_points) < POINTS:
 print("dicti", dictionaries)
 elapsed_time = time.time() - start_time
 print(elapsed_time)
-# ----
 
 edges = dictionaries
 
@@ -110,19 +104,11 @@ for grp in edges.values():
     for case in grp:
         pointa_x = x[case[0]]
         pointa_y = y[case[0]]
-
         pointb_x = x[case[1]]
         pointb_y = y[case[1]]
+
         plt.plot([pointa_x, pointb_x], [pointa_y, pointb_y], marker='o', c=colors[clr_nr])#, marker='o')
     clr_nr += 1
-
-# plt.scatter(
-#     x,
-#     y,
-#     c=clrs
-# )
-
-
 
 plt.xlabel('X')
 plt.ylabel('Y')
